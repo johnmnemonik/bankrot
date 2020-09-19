@@ -1,7 +1,13 @@
-# Запуск
+# Установка зависимостей и создании среды
 
-python -m venv venv
+python3.6 -m venv venv
 
 source venv/bin/activate
 
-python install -r requirements.txt
+pip install -r requirements.txt
+
+# Запуск
+python bankrot.py
+
+# проблемы
+устоноить chromedriver под свою ОС
