@@ -10,4 +10,4 @@ pip install -r requirements.txt
 python bankrot.py
 
 # проблемы
-устоноить chromedriver под свою ОС
+установить chromedriver под свою ОС

@@ -22,6 +22,17 @@ SELECT = 'ctl00_cphBody_ucRegion_ddlBoundList'
 TRANSLIT = 'ru'
 
 
+# driver.find_element_by_name('ctl00$cphBody$cldrBeginDate$tbSelectedDate').clear()
+
+# ctl00$cphBody$cldrBeginDate$tbSelectedDate 
+# ctl00$cphBody$cldrEndDate$tbSelectedDate
+
+# ctl00_cphBody_trINN
+
+
+# driver.find_element_by_name('ctl00$cphBody$cldrBeginDate$tbSelectedDate').send_keys('05.09.2017')
+# driver.find_element_by_id('ctl00_cphBody_ibMessagesSearch').click()
+
 class CapitalisedHelpFormatter(argparse.HelpFormatter):
     def add_usage(self, usage, actions, groups, prefix=None):
         if prefix is None:
