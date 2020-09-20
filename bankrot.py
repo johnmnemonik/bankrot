@@ -52,9 +52,16 @@ class Crawler:
 		self._ndfile = ndfile
 
 
-	def _translit(self, text):
+	def _translit_en(self, text):
+		# транслит в en
 		en = translit(text, self._language, reversed=True)
 		return en
+
+
+	def _translit_ru(self, text):
+		# транслит в ru
+		ru = translit(text, self._language)
+		return ru
 
 	def check(self):
 		if os.path.isfile(self._ndfile):
@@ -64,6 +71,7 @@ class Crawler:
 
 
 	def _write(self):
+		# реализация записи в файл
 		pass
 
 
@@ -81,7 +89,7 @@ class Crawler:
 		for _ in range(self._start, self._stop):
 			select.select_by_index(_)
 			time.sleep(1)
-			print(select.first_selected_option.text, '\t', _, '\t', self._translit(
+			print(select.first_selected_option.text, '\t', _, '\t', self._translit_en(
 				select.first_selected_option.text))
 
 			self.br.find_element_by_id(SEARCH).click()
