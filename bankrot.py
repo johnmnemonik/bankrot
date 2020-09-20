@@ -1,5 +1,5 @@
 import argparse
-import time
+from time import sleep as block
 import os
 
 from selenium import webdriver
@@ -23,15 +23,13 @@ TRANSLIT = 'ru'
 
 
 # driver.find_element_by_name('ctl00$cphBody$cldrBeginDate$tbSelectedDate').clear()
-
 # ctl00$cphBody$cldrBeginDate$tbSelectedDate 
 # ctl00$cphBody$cldrEndDate$tbSelectedDate
-
 # ctl00_cphBody_trINN
-
-
 # driver.find_element_by_name('ctl00$cphBody$cldrBeginDate$tbSelectedDate').send_keys('05.09.2017')
 # driver.find_element_by_id('ctl00_cphBody_ibMessagesSearch').click()
+# select = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "//select[@class='select' and @name='fruits']"))))
+
 
 class CapitalisedHelpFormatter(argparse.HelpFormatter):
     def add_usage(self, usage, actions, groups, prefix=None):
@@ -43,13 +41,16 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
 
 
 class Crawler:
-	def __init__(self, ndfile=None):
+	def __init__(self, ndfile, start_add_scan, start_new_scan):
+		
 		self.br = webdriver.Chrome()
 		self._start = 1
 		self._stop = 88
 		self._language = 'ru'
 		self._new = None
 		self._ndfile = ndfile
+		self.start_add_scan = start_add_scan
+		self.start_new_scan = start_new_scan
 
 
 	def _translit_en(self, text):
@@ -88,7 +89,7 @@ class Crawler:
 		
 		for _ in range(self._start, self._stop):
 			select.select_by_index(_)
-			time.sleep(1)
+			block(1)
 			print(select.first_selected_option.text, '\t', _, '\t', self._translit_en(
 				select.first_selected_option.text))
 
@@ -99,20 +100,19 @@ class Crawler:
 
 			for num, pag in enumerate(paginate):
 				self.br.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-				time.sleep(1)
+				block(1)
 				try:
 					self.br.find_elements_by_css_selector('tr.pager td')[num+1].click()
 				except Exception:
 					self.br.execute_script("scrollBy(0,250);")
 					break
-				time.sleep(3)
+				block(3)
 				self.br.execute_script("scrollBy(0, -1000);")
-				time.sleep(2)
+				block(2)
 				break
 
 
 	def go(self):
-		time.sleep(5)
 		self.parser()
 		self.br.close()
 
@@ -130,7 +130,7 @@ def do_go():
 		'-s', '--start', default=False,
 		help='Парсим все данные которые есть на сервере', type=bool)
 	arg_parser.add_argument(
-		'-a', '--add', default=True,
+		'-a', '--add', default=False,
 		help='Парсим данные которые обновились за сутки', type=bool)
 	arg_parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
         help='Показать это справочное сообщение и выйти.')
@@ -142,11 +142,6 @@ def do_go():
 
 if __name__ == '__main__':
 	print("НАЧАЛО РАБОТЫ")
-	do_go()
-	craw = Crawler()
+	args = do_go()
+	craw = Crawler(args.output, args.add, args.start)
 	craw.go()
-
-
-
-
-# select = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "//select[@class='select' and @name='fruits']"))))
